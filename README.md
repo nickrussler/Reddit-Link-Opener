@@ -16,4 +16,4 @@ Decide yourself how many Links you want to open at once.
 
 ### Keyboard shortcut
 
-You are free to choose your own keyboard shortcut to open up the Tabs
+You are free to choose your own Keyboard shortcut to open up the Tabs
