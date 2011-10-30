@@ -12,7 +12,7 @@ You can also open the comments in a seperate tab.
 
 ### New Tabs Limit
 
-Decide yourself how many links you want to open at once.
+Decide yourself how many Links you want to open at once.
 
 ### Keyboard shortcut
 
