@@ -1,0 +1,21 @@
+{
+   "background_page": "background.html",
+   "browser_action": {
+      "default_icon": "img/icon19.png",
+      "default_title": "F7U12 Link Opener"
+   },
+   "content_scripts": [ {
+      "js": [ "jquery-1.6.4.min.js", "shortcut.js", "contentScript.js"],
+      "matches": [ "http://www.reddit.com/*", "https://www.reddit.com/*" ],
+      "run_at": "document_start"
+   } ],
+   "description": "This extension will open all links on F7U12",
+   "icons": {
+      "128": "img/icon128.png"
+   },
+   "name": "F7U12 Link Opener",
+   "options_page": "options.html",
+   "permissions": ["tabs", "history", "unlimitedStorage"],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "1.0.11"
+}
