@@ -1,8 +1,17 @@
+var jquery_set_links;
+var jquery_set_comments;
+
+function fakeClick(obj) {
+	var evObj = document.createEvent('MouseEvents');
+	evObj.initEvent('mousedown', true, true);
+	obj.dispatchEvent(evObj);
+}
+
 chrome.extension.onRequest.addListener( function( request, sender, sendResponse) {
 	if (request.action == "openSelectedUrls")
 	{	
-		var jquery_set_links = jQuery("#siteTable .even a.title");
-		var jquery_set_comments = jQuery("#siteTable .even a.comments");
+		jquery_set_links = jQuery("#siteTable .even a.title");
+		jquery_set_comments = jQuery("#siteTable .even a.comments");
 		
 		var data = Array();
 		
@@ -15,10 +24,7 @@ chrome.extension.onRequest.addListener( function( request, sender, sendResponse)
 			sendResponse(data);
 		}
 	} else if (request.action == "scrapeInfoCompanionBar") {	
-		var jquery_set_links = jQuery("#siteTable .even a.title");
-		var evObj = document.createEvent('MouseEvents');
-		evObj.initEvent('mousedown', true, true);
-		jquery_set_links[request.index].dispatchEvent(evObj);
+		fakeClick(jquery_set_links[request.index]);
 	} else if (request.action == "updateSettings") {
 		if (request.keyboardshortcut != request.oldkeyboardshortcut) {
 			if (request.oldkeyboardshortcut) {
