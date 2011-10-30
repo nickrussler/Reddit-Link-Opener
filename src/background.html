@@ -95,13 +95,9 @@
 							tmp_url += ".png";
 							chrome.history.addUrl({url: url[1]}); // To Make the original link "purple"
 						}
-					}					
+					}				
 					
-					chrome.tabs.create({url: tmp_url, selected: false}, function(tab){
-						if (tmp_url == url[1]) {
-							chrome.extension.sendRequest("algjnflpgoopkdijmkalfcifomdhmcbe", {onActionClicked: "true", tab: tab});
-						}
-					});
+					chrome.tabs.create({url: tmp_url, selected: false});
 					
 					if (opencomments) {
 						chrome.tabs.create({url: url[2], selected: false});

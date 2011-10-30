@@ -8,7 +8,11 @@ chrome.extension.onRequest.addListener( function( command, sender, sendResponse)
 		
 		var i=0;
 		for (var i in jquery_set_links)
-		{
+		{		
+			var evObj = document.createEvent('MouseEvents');
+			evObj.initEvent( 'mousedown', true, true );
+			jquery_set_links[i].dispatchEvent(evObj);
+			
 			data.push(new Array(jquery_set_links[i].text, jquery_set_links[i].href, jquery_set_comments[i].href));
 		}
 
