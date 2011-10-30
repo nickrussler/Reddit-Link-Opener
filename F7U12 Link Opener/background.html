@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<script src="jquery-1.6.4.min.js"></script>
+	<script src="shortcut.js"></script>
+	
+	<script type="text/javascript">
+		chrome.browserAction.onClicked.addListener( function( tab){
+				openAllUrls( tab);
+			}
+		);
+			
+		chrome.extension.onRequest.addListener(	function(request, sender, sendResponse) {	
+				if (request.method == "keyboardShortcut") {
+					openAllUrls(sender.tab);
+				} else if (request.method == "getStatus") {				
+					sendResponse({status: localStorage['keyboardshortcut']});
+				}
+			}
+		);
+		
+		function updateSettings() {
+			chrome.windows.getCurrent(function(win)
+			{
+				// get an array of the tabs in the window
+				chrome.tabs.getAllInWindow(win.id, function(tabs)
+				{
+					for (i in tabs) // loop over the tabs
+					{
+						chrome.tabs.sendRequest(tabs[i].id, {method: "updateSettings", keyboardshortcut: localStorage["keyboardshortcut"], oldkeyboardshortcut: localStorage["oldkeyboardshortcut"]}, function(response) {
+							console.log(response.farewell);
+						});
+					}
+				});
+			});
+		}
+
+		function openAllUrls( tab)
+		{
+			chrome.tabs.sendRequest( tab.id, "openSelectedUrls", openUrls);
+		}
+		
+		// Integer Wrapper Object - needed for Call by Reference
+		function int_wrapper(init){
+			this.value = init
+		}
+
+		function openUrls( urls)
+		{
+			var count = new int_wrapper(0);
+		
+			var lastUrl = null;
+			for (var i in urls)
+			{
+				if ( urls[i][1] != lastUrl )
+				{
+					if ( !urls[i][1].match( "javascript:.*") )
+					{				
+						openUrl(urls[i], count);
+						
+						lastUrl = urls[i][1];
+					}
+				}
+			}
+		}	
+
+		function openUrl(url, count)
+		{	
+			var opencomments = (localStorage["opencomments"] == "true");
+			var openvisitedlinks = (localStorage["openvisitedlinks"] == "true");
+			var opennsfwlinks = (localStorage["opennsfwlinks"] == "true");
+			var openlinksdirectly = (localStorage["openlinksdirectly"] == "true");			
+			var tabslimit = localStorage["tabslimit"];
+			
+			if (!opennsfwlinks && (url[0].toLowerCase().indexOf("nsfw") != -1)) {
+				return;
+			}
+			
+			var historyItemUrl = url[1];
+			chrome.history.getVisits({url:historyItemUrl}, function(visitItems){
+				if (count.value >= tabslimit) {
+					return;
+				}
+			
+				if (openvisitedlinks || (visitItems.length == 0)) {
+				
+					var tmp_url = url[1];
+				
+					if (openlinksdirectly) {					
+						var m = tmp_url.match(/([^\/\\]+)\.(\w+)$/);
+
+						if ((!m) && (tmp_url.toLowerCase().indexOf("imgur") != -1)) {
+							tmp_url += ".png";
+							chrome.history.addUrl({url: url[1]}); // To Make the original link "purple"
+						}
+					}					
+					
+					chrome.tabs.create({url: tmp_url, selected: false}, function(tab){
+						if (tmp_url == url[1]) {
+							chrome.extension.sendRequest("algjnflpgoopkdijmkalfcifomdhmcbe", {onActionClicked: "true", tab: tab});
+						}
+					});
+					
+					if (opencomments) {
+						chrome.tabs.create({url: url[2], selected: false});
+					}
+					
+					count.value = count.value + 1;
+				}
+			});
+		}
+		
+		function onInstall() {
+			chrome.tabs.create({url: "options.html", selected: true});
+		}
+
+		function onUpdate() {
+			chrome.tabs.create({url: "changelog.html", selected: true});
+		}
+
+		function getVersion() {
+			var details = chrome.app.getDetails();
+			return details.version;
+		}
+		
+		function init()
+		{	
+			var opencomments = localStorage["opencomments"];
+			var openvisitedlinks = localStorage["openvisitedlinks"];
+			var opennsfwlinks = localStorage["opennsfwlinks"];
+			var openlinksdirectly = localStorage["openlinksdirectly"];
+			var tabslimit = localStorage["tabslimit"];
+			var keyboardshortcut = localStorage["keyboardshortcut"];
+			
+			localStorage["oldkeyboardshortcut"] = undefined;
+
+			if (!opencomments) {
+				localStorage["opencomments"] = "false";
+			}
+			
+			if (!openvisitedlinks) {
+				localStorage["openvisitedlinks"] = "false";
+			}
+			
+			if (!opennsfwlinks) {
+				localStorage["opennsfwlinks"] = "true";
+			}
+			
+			if (!openlinksdirectly) {
+				localStorage["openlinksdirectly"] = "false";
+			}
+  
+			if (!tabslimit) {
+				localStorage["tabslimit"] = 25;
+			}	
+			
+			if (!keyboardshortcut) {
+				localStorage["keyboardshortcut"] = "Ctrl+Shift+F";
+			}	
+
+			// Check if the version has changed.
+			var currVersion = getVersion();
+			var prevVersion = localStorage['version']
+			if (currVersion != prevVersion) {
+				// Check if we just installed this extension.
+				if (typeof prevVersion == 'undefined') {
+					onInstall();
+				} else {
+					onUpdate();
+				}
+				localStorage['version'] = currVersion;
+			}		
+		}
+	</script>
+    <title>F7U12 - Background page</title>
+</head>
+<body onload="init()">
+</body>
+</html>
