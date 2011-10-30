@@ -7,12 +7,12 @@
 	<script src="shortcut.js"></script>
 	
 	<script type="text/javascript">
-		chrome.browserAction.onClicked.addListener( function( tab){
-				openAllUrls( tab);
+		chrome.browserAction.onClicked.addListener(function(tab) {
+				openAllUrls(tab);
 			}
 		);
 			
-		chrome.extension.onRequest.addListener(	function(request, sender, sendResponse) {	
+		chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {	
 				if (request.method == "keyboardShortcut") {
 					openAllUrls(sender.tab);
 				} else if (request.method == "getStatus") {				
@@ -29,7 +29,7 @@
 				{
 					for (i in tabs) // loop over the tabs
 					{
-						chrome.tabs.sendRequest(tabs[i].id, {method: "updateSettings", keyboardshortcut: localStorage["keyboardshortcut"], oldkeyboardshortcut: localStorage["oldkeyboardshortcut"]}, function(response) {
+						chrome.tabs.sendRequest(tabs[i].id, {action: 'updateSettings', keyboardshortcut: localStorage["keyboardshortcut"], oldkeyboardshortcut: localStorage["oldkeyboardshortcut"]}, function(response) {
 							console.log(response.farewell);
 						});
 					}
@@ -37,9 +37,8 @@
 			});
 		}
 
-		function openAllUrls( tab)
-		{
-			chrome.tabs.sendRequest( tab.id, "openSelectedUrls", openUrls);
+		function openAllUrls(tab) {
+			chrome.tabs.sendRequest( tab.id, {action: 'openSelectedUrls'}, openUrls);
 		}
 		
 		// Integer Wrapper Object - needed for Call by Reference
@@ -47,18 +46,19 @@
 			this.value = init
 		}
 
-		function openUrls( urls)
-		{
+		function openUrls(urls, tabid) {
 			var count = new int_wrapper(0);
 		
 			var lastUrl = null;
-			for (var i in urls)
+			
+			var i;
+			for (i = 0; i < urls.length; i++)
 			{
 				if ( urls[i][1] != lastUrl )
 				{
 					if ( !urls[i][1].match( "javascript:.*") )
 					{				
-						openUrl(urls[i], count);
+						openUrl(urls[i], count, i, tabid);
 						
 						lastUrl = urls[i][1];
 					}
@@ -66,8 +66,7 @@
 			}
 		}	
 
-		function openUrl(url, count)
-		{	
+		function openUrl(url, count, index, tabid) {	
 			var opencomments = (localStorage["opencomments"] == "true");
 			var openvisitedlinks = (localStorage["openvisitedlinks"] == "true");
 			var opennsfwlinks = (localStorage["opennsfwlinks"] == "true");
@@ -79,7 +78,7 @@
 			}
 			
 			var historyItemUrl = url[1];
-			chrome.history.getVisits({url:historyItemUrl}, function(visitItems){
+			chrome.history.getVisits({url:historyItemUrl}, function(visitItems) {
 				if (count.value >= tabslimit) {
 					return;
 				}
@@ -95,8 +94,12 @@
 							tmp_url += ".png";
 							chrome.history.addUrl({url: url[1]}); // To Make the original link "purple"
 						}
-					}				
+					}	
 					
+					chrome.tabs.getSelected(null, function(tab){
+						chrome.tabs.sendRequest(tab.id, {action: "scrapeInfoCompanionBar", index: index});
+					});
+										
 					chrome.tabs.create({url: tmp_url, selected: false});
 					
 					if (opencomments) {

@@ -1,5 +1,5 @@
-chrome.extension.onRequest.addListener( function( command, sender, sendResponse) {
-	if ( command == "openSelectedUrls" )
+chrome.extension.onRequest.addListener( function( request, sender, sendResponse) {
+	if (request.action == "openSelectedUrls")
 	{	
 		var jquery_set_links = jQuery("#siteTable .even a.title");
 		var jquery_set_comments = jQuery("#siteTable .even a.comments");
@@ -7,22 +7,31 @@ chrome.extension.onRequest.addListener( function( command, sender, sendResponse)
 		var data = Array();
 		
 		var i;
-		for (i = 0; i < jquery_set_links.length; i++)
-		{		
-			var evObj = document.createEvent('MouseEvents');
-			evObj.initEvent('mousedown', true, true );
-			jquery_set_links[i].dispatchEvent(evObj);
-			
+		for (i = 0; i < jquery_set_links.length; i++) {
 			data.push(new Array(jquery_set_links[i].text, jquery_set_links[i].href, jquery_set_comments[i].href));
 		}
 
-		if (data.length > 0)
-		{
+		if (data.length > 0) {		
 			sendResponse(data);
+		}
+	} else if (request.action == "scrapeInfoCompanionBar") {	
+		var jquery_set_links = jQuery("#siteTable .even a.title");
+		var evObj = document.createEvent('MouseEvents');
+		evObj.initEvent('mousedown', true, true);
+		jquery_set_links[request.index].dispatchEvent(evObj);
+	} else if (request.action == "updateSettings") {
+		if (request.keyboardshortcut != request.oldkeyboardshortcut) {
+			if (request.oldkeyboardshortcut) {
+				shortcut.remove(request.oldkeyboardshortcut);
+			}
+			
+			shortcut.add(request.keyboardshortcut, function() {
+					chrome.extension.sendRequest({method: "keyboardShortcut"});
+				}
+			);	
 		}
 	}
 });
-
 
 chrome.extension.sendRequest({method: "getStatus"}, function(response) {		
 	var KeyboardShortcut = response.status;	
@@ -34,22 +43,3 @@ chrome.extension.sendRequest({method: "getStatus"}, function(response) {
 		}
 	);	
 });
-
-chrome.extension.onRequest.addListener(
-	function(request, sender, sendResponse) {
-		if (request.method == "updateSettings") {		
-			if (request.keyboardshortcut != request.oldkeyboardshortcut) {
-				if (request.oldkeyboardshortcut) {
-					shortcut.remove(request.oldkeyboardshortcut);
-				}
-				
-				shortcut.add(request.keyboardshortcut, function() {
-						chrome.extension.sendRequest({method: "keyboardShortcut"}, function(response) {
-						  console.log(response.farewell);
-						});
-					}
-				);	
-			}
-		}		
-	}
-);
