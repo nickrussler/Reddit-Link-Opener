@@ -9,7 +9,7 @@
       "matches": [ "http://www.reddit.com/*", "https://www.reddit.com/*" ],
       "run_at": "document_start"
    } ],
-   "description": "This extension will open all links on F7U12",
+   "description": "This extension will open all links in tabs on F7U12 / Reddit",
    "icons": {
       "128": "img/icon128.png"
    },
@@ -17,5 +17,5 @@
    "options_page": "options.html",
    "permissions": ["tabs", "history", "unlimitedStorage"],
    "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "1.1.0"
+   "version": "1.1.1"
 }
