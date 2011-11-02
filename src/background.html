@@ -51,7 +51,9 @@
 					var openlinksdirectly = (localStorage["openlinksdirectly"] == "true");
 					var tabslimit = localStorage["tabslimit"];
 
-					if(!opennsfwlinks && (url[0].toLowerCase().indexOf("nsfw") != -1)) {
+					alert(url[0] + "|" + url[0].toLowerCase().indexOf("nsfw"));
+					
+					if(!opennsfwlinks && ((url[0].toLowerCase().indexOf("nsfw") != -1) || url[3])) {
 						openUrl(urls, index + 1, count, tabid);
 						return;
 					}
@@ -74,7 +76,7 @@
 						if(openlinksdirectly) {
 							var m = url[1].match(/([^\/\\]+)\.(\w+)$/);
 
-							if((!m) && (tmp_url.toLowerCase().indexOf("imgur") != -1)) {
+							if((!m) && (url[1].toLowerCase().indexOf("imgur") != -1)) {
 								// To Make the original link "purple"
 								chrome.history.addUrl({
 									url : url[1]

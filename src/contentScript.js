@@ -7,17 +7,29 @@ function fakeClick(obj) {
 	obj.dispatchEvent(evObj);
 }
 
+function isNSFW(url){
+	var nsfw_arr = $("#siteTable .even .nsfw-stamp");
+	
+	for (var i=0; i < nsfw_arr.length; i++) {
+	  if (url.parentNode.parentNode == nsfw_arr[i].parentNode.parentNode){
+	  	return true;
+	  }	  
+	};
+	
+	return false;
+}
+
 chrome.extension.onRequest.addListener(function(request, sender, callback) {
 	switch (request.action) {
 		case 'openRedditLinks':
-			jquery_set_links = jQuery("#siteTable .even a.title");
-			jquery_set_comments = jQuery("#siteTable .even a.comments");
+			jquery_set_links = $("#siteTable .even a.title");
+			jquery_set_comments = $("#siteTable .even a.comments");
 
 			var data = Array();
 
 			var i;
 			for( i = 0; i < jquery_set_links.length; i++) {
-				data.push(new Array(jquery_set_links[i].text, jquery_set_links[i].href, jquery_set_comments[i].href));
+				data.push(new Array(jquery_set_links[i].text, jquery_set_links[i].href, jquery_set_comments[i].href, isNSFW(jquery_set_links[i])));
 			}
 
 			if(data.length > 0) {
