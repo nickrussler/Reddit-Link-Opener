@@ -50,8 +50,6 @@
 					var opennsfwlinks = (localStorage["opennsfwlinks"] == "true");
 					var openlinksdirectly = (localStorage["openlinksdirectly"] == "true");
 					var tabslimit = localStorage["tabslimit"];
-
-					alert(url[0] + "|" + url[0].toLowerCase().indexOf("nsfw"));
 					
 					if(!opennsfwlinks && ((url[0].toLowerCase().indexOf("nsfw") != -1) || url[3])) {
 						openUrl(urls, index + 1, count, tabid);
