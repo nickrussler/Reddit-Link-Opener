@@ -41,7 +41,7 @@ chrome.extension.onRequest.addListener(function(request, sender, callback) {
 			break;
 
 		case 'openNextPage':
-			window.location = $(".nextprev a").attr("href");
+			window.location = $('.nextprev a[rel~="next"]').attr("href");
 			break;
 
 		case 'scrapeInfoCompanionBar':
