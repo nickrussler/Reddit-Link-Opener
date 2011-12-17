@@ -8,7 +8,7 @@ function fakeClick(obj) {
 }
 
 function isNSFW(url){
-	var nsfw_arr = $("#siteTable .even .nsfw-stamp");
+	var nsfw_arr = $("#siteTable .even .nsfw-stamp, #siteTable .odd .nsfw-stamp");
 	
 	for (var i=0; i < nsfw_arr.length; i++) {
 	  if (url.parentNode.parentNode == nsfw_arr[i].parentNode.parentNode){
@@ -22,8 +22,8 @@ function isNSFW(url){
 chrome.extension.onRequest.addListener(function(request, sender, callback) {
 	switch (request.action) {
 		case 'openRedditLinks':
-			jquery_set_links = $("#siteTable .even a.title");
-			jquery_set_comments = $("#siteTable .even a.comments");
+			jquery_set_links = $("#siteTable .even a.title, #siteTable .odd a.title");
+			jquery_set_comments = $("#siteTable .even a.comments, #siteTable .odd a.comments");
 
 			var data = Array();
 
