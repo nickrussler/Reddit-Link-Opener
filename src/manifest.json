@@ -1,21 +1,22 @@
 {
-   "background_page": "background.html",
+   "manifest_version": 2,
+   "background": { "page": "background.html" },
    "browser_action": {
       "default_icon": "img/icon19.png",
-      "default_title": "F7U12 Link Opener"
+      "default_title": "Reddit Link Opener"
    },
    "content_scripts": [ {
       "js": [ "jquery-1.6.4.min.js", "shortcut.js", "contentScript.js"],
       "matches": [ "http://www.reddit.com/*", "https://www.reddit.com/*" ],
       "run_at": "document_start"
    } ],
-   "description": "This extension will open all links in tabs on F7U12 / Reddit",
+   "description": "This extension will open all links in tabs on Reddit and all Subreddits (for example F7u12)",
    "icons": {
       "128": "img/icon128.png"
    },
-   "name": "F7U12 Link Opener",
+   "name": "Reddit Link Opener",
    "options_page": "options.html",
    "permissions": ["tabs", "history", "unlimitedStorage"],
    "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "1.2.3"
+   "version": "1.2.4"
 }
