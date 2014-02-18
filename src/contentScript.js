@@ -22,8 +22,8 @@ function isNSFW(url){
 chrome.extension.onRequest.addListener(function(request, sender, callback) {
 	switch (request.action) {
 		case 'openRedditLinks':
-			jquery_set_links = $("#siteTable .even a.title, #siteTable .odd a.title");
-			jquery_set_comments = $("#siteTable .even a.comments, #siteTable .odd a.comments");
+			jquery_set_links = $("#siteTable a.title");
+			jquery_set_comments = $("#siteTable a.comments");
 
 			var data = Array();
 
