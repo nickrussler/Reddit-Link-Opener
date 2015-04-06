@@ -59,7 +59,7 @@
 						url : historyItemUrl
 					}, function(visitItems) {
 
-						if(!(openvisitedlinks || (visitItems.length == 0))) {
+						if(!(openvisitedlinks || ((visitItems.length == 0) && url[4]))) {
 							openUrl(urls, index + 1, count, tabid);
 							return;
 						}
