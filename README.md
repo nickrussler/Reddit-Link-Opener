@@ -1,6 +1,6 @@
 # Reddit Link Opener
 
-This Extension will open all Links on the currently opened F7U12/Subreddit Page.
+This Extension will open all Links on the currently opened Reddit/Subreddit Page.
 
 ![logo](src/img/icon128.png)
 
