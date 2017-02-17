@@ -2,6 +2,7 @@ var jquery_set_links;
 var jquery_set_comments;
 
 function fakeClick(obj) {
+	$(obj).closest('.thing').addClass('visited');
 	
 	var evObj = document.createEvent('MouseEvents');
 	evObj.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 1, null);
