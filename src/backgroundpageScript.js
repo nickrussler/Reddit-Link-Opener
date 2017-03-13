@@ -65,15 +65,16 @@
 						}
 
 						if(openlinksdirectly) {
-							var m = url[1].match(/([^\/\\]+)\.(\w+)$/);
+							var isIReddIt = url[5] && (url[5].toLowerCase().indexOf("i.redd.it") != -1);
+							var isIReddituploads = url[5] && (url[5].toLowerCase().indexOf("i.reddituploads.com") != -1);
 
-							if((!m) && (url[1].toLowerCase().indexOf("imgur") != -1)) {
-								// To Make the original link "purple"
+							if(isIReddIt || isIReddituploads) {								
+								url[1] = url[5];
+								
+								// add the original URL to the history
 								chrome.history.addUrl({
 									url : url[1]
 								});
-
-								url[1] += ".png";
 							}
 						}
 

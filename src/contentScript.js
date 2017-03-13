@@ -32,7 +32,7 @@ chrome.extension.onRequest.addListener(function(request, sender, callback) {
 
 			var i;
 			for( i = 0; i < jquery_set_links.length; i++) {
-				data.push(new Array(jquery_set_links[i].text, jquery_set_links[i].href, jquery_set_comments[i].href, isNSFW(jquery_set_links[i]), ($(jquery_set_links[i]).parents('.visited').length == 0)));
+				data.push(new Array(jquery_set_links[i].text, jquery_set_links[i].href, jquery_set_comments[i].href, isNSFW(jquery_set_links[i]), ($(jquery_set_links[i]).parents('.visited').length == 0), $(jquery_set_links[i]).closest('.thing').data('url')));
 			}
 
 			if(data.length > 0) {
