@@ -4,11 +4,11 @@ This Extension will open all Links on the currently opened Reddit/Subreddit Page
 
 ![logo](src/img/icon128.png)
 
-## features
+## Features
 
-### open comments
+### Open Comments Or Links
 
-You can also open the comments in a seperate tab.
+You can choose between opening only the comments, only articles or opening both.
 
 ### New Tabs Limit
 
