@@ -64,6 +64,7 @@
 							return;
 						}
 
+						/*
 						if(openlinksdirectly) {
 							var isIReddIt = url[5] && (url[5].toLowerCase().indexOf("i.redd.it") != -1);
 							var isIReddituploads = url[5] && (url[5].toLowerCase().indexOf("i.reddituploads.com") != -1);
@@ -77,6 +78,7 @@
 								});
 							}
 						}
+						*/
 
 						chrome.tabs.sendRequest(tabid, {
 							action : "scrapeInfoCompanionBar",
@@ -170,7 +172,7 @@
 					localStorage["keyboardshortcut"] = "Ctrl+Shift+F";
 				}
 
-				chrome.browserAction.onClicked.addListener(function(tab) {
+				chrome.browserAction.onClicked.addListener(function(tab) {					
 					openAllUrls(tab);
 				});
 
