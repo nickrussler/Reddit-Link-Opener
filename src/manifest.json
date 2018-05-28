@@ -6,7 +6,7 @@
    "icons": {
       "128": "img/icon128.png"
    },
-   "version": "1.7.0",
+   "version": "1.7.1",
    
    "background": { 
      "page": "background.html"
@@ -19,7 +19,7 @@
    
    "content_scripts": [ {
       "js": [ "jquery-1.6.4.min.js", "shortcut.js", "contentScript.js"],
-      "matches": [ "http://www.reddit.com/*", "https://www.reddit.com/*" ],
+      "matches": [ "http://www.reddit.com/*", "https://www.reddit.com/*", "http://old.reddit.com/*", "https://old.reddit.com/*"],
       "run_at": "document_start"
    } ],
    

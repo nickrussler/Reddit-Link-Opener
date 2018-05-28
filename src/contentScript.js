@@ -26,9 +26,16 @@ function isNSFW(url) {
 
 chrome.extension.onRequest.addListener(function(request, sender, callback) {	
 	switch (request.action) {
-		case 'openRedditLinks':
-			jquery_set_links = $('.scrollerItem a[data-click-id="body"]:visible');
-			jquery_set_comments = $('.scrollerItem a[data-click-id="comments"]:visible');
+		case 'openRedditLinks':		
+			var isNewRedditLayout = $("#siteTable").length === 0;
+			
+			if (isNewRedditLayout) {				
+				jquery_set_links = $('.scrollerItem a[data-click-id="body"]:visible');
+				jquery_set_comments = $('.scrollerItem a[data-click-id="comments"]:visible');
+			} else {
+				jquery_set_links = $("#siteTable a.title:visible");
+				jquery_set_comments = $("#siteTable a.comments:visible");
+			}
 
 			var data = Array();
 
@@ -49,7 +56,14 @@ chrome.extension.onRequest.addListener(function(request, sender, callback) {
 			break;
 
 		case 'openNextPage':
-			window.scrollTo(0, document.body.scrollHeight);
+			var isNewRedditLayout = $("#siteTable").length === 0;
+			
+			if (isNewRedditLayout) {
+				window.scrollTo(0, document.body.scrollHeight);
+			} else {
+				window.location = $('.nextprev a[rel~="next"]').attr("href");
+			}		
+			
 			break;
 
 		case 'scrapeInfoCompanionBar':
