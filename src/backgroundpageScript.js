@@ -90,7 +90,7 @@
 							selected : false
 						});
 
-						if(opencomments) {
+						if(opencomments && url[1] !== url[2]) {
 							chrome.tabs.create({
 								url : url[2],
 								selected : false
